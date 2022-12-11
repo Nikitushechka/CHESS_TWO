@@ -15,7 +15,7 @@ Game::Game() {
 void Game::init() {
     for (int i = 1; i < 9; ++i) {
         for (int j = 1; j < 9; ++j) {
-            this->board[i][j] = Cell()
+            this->board[i][j] = Cell(i, j);
         }
     }
 }
@@ -26,7 +26,6 @@ int Game::start() {
     while (this->funny_){
 
         move_count_ += 1;
-        cin <<
     }
     return 0;
 }
