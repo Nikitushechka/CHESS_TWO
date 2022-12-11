@@ -1,6 +1,9 @@
 #include <iostream>
+#include "Logic(raper).cpp"
+#include "Cell.cpp"
+#include "Pieces.cpp"
 
 int main() {
-    std::cout << "Hello, World!" << std::endl;
+
     return 0;
 }

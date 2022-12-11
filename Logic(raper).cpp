@@ -15,7 +15,14 @@ Game::Game() {
 void Game::init() {
     for (int i = 1; i < 9; ++i) {
         for (int j = 1; j < 9; ++j) {
-            this->board[i][j] = Cell(i, j);
+            bool color;
+            if ((i + j) % 2 == 0){
+                color = 0;
+            }
+            else{
+                color = 1;
+            }
+            this->board_[i][j] = Cell(i, j, color);
         }
     }
 }

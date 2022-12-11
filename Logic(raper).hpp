@@ -14,7 +14,7 @@ using namespace std;
 class Game{
     bool funny_ = true;
     unsigned short move_count_ = 0;
-    vector<vector<Cell>>;
+    vector<vector<Cell>> board_;
 public:
     Game();
     void init();
