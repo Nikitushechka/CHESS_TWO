@@ -12,14 +12,7 @@ Game::Game() {
 void Game::init() {
     for (char i = 1; i < 9; ++i) {
         for (char j = 1; j < 9; ++j) {
-            bool color;
-            if ((i + j) % 2 == 0){
-                color = 0;
-            }
-            else{
-                color = 1;
-            }
-            this->board_[i][j] = Cell(i, j, color);
+            this->board_[i][j] = Cell(i, j);
         }
     }
 }
