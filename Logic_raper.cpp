@@ -35,23 +35,47 @@ void Game::init() {
         }
     }
 
-    }
+}
 
-int Game::start() {
+int Game::play() {
+    while (funny_) {
+        this->move_count_+=1;
+
+        string from_here, to_here;
+        cin >> from_here >> to_here;
+        while ((from_here.size() != 2)    or  (to_here.size() != 2)){
+            cout << "try again bro" << endl;
+            cin >> from_here >> to_here;
+        }
+        while ((from_here[0] - 'A' < 0) or  (from_here[0] - 'A' > 7) or
+               (from_here[1] - '0' < 0) or  (from_here[1] - '0' > 7) or
+               (to_here[0] - 'A' < 0)   or  (to_here[0] - 'A' > 7)   or
+               (to_here[1] - '0' < 0)   or  (to_here[1] - '0' > 7)     ) {
+            cout << "try again bro" << endl;
+            cin >> from_here >> to_here;
+        }
+
+
+        board_[from_here[0]][from_here[1]].GetPiece->IsAvaliable(to_here[0], to_here[1]);
+
+        cout << from_here[0] - 'A' + 1 << endl;
+        if (this->move_count_ > 3) {funny_ = false;}
+    }
+}
+
+void Game::start() {
     this->init();
 
-    while (this->funny_){
+    this->play();
 
-        move_count_ += 1;
-    }
-    return 0;
+    return;
 }
 
 void Game::end() {
     this->funny_ = 0;
 }
 
-bool Game::is_finnish() {
+bool Game::is_finnished() {
     return false;
 }
 

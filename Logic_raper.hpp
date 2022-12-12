@@ -24,13 +24,14 @@ private:
     vector<vector<Cell>> board_;
 
     void init();
+    int play();
 
 public:
     Game();
 
-    int start();
+    void start();
     void end();
-    bool is_finnish();
+    bool is_finnished();
 };
 
 
