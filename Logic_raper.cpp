@@ -29,7 +29,9 @@ void Game::init() {
     this->board_ = default_board;
     for (vector<Cell>& i: default_board) {
         for (Cell& j: i) {
-            if (j.IsEmpty())
+            if (!j.IsEmpty()) {
+                j.GetPiece->SetCell(make_unique<Cell>(j));
+            }
         }
     }
 
