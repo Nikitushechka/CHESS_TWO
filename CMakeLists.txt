@@ -3,4 +3,13 @@ project(CHESS_TWO)
 
 set(CMAKE_CXX_STANDARD 14)
 
-add_executable(CHESS_TWO main.cpp "Logic(raper).cpp" "Logic(raper).hpp")
+include_directories(.)
+
+add_executable(CHESS_TWO
+        Cell.cpp
+        Cell.hpp
+        Logic_raper.cpp
+        Logic_raper.hpp
+        main.cpp
+        Pieces.cpp
+        Pieces.hpp)

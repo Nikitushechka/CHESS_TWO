@@ -1,10 +1,7 @@
 //
 // Created by Jenya on 11.12.2022.
 //
-#include "Logic(raper).hpp"
-#include <iostream>
-#include <string>
-//#include <thread>
+#include "Logic_raper.hpp"
 
 using namespace std;
 
@@ -13,8 +10,8 @@ Game::Game() {
 }
 
 void Game::init() {
-    for (int i = 1; i < 9; ++i) {
-        for (int j = 1; j < 9; ++j) {
+    for (char i = 1; i < 9; ++i) {
+        for (char j = 1; j < 9; ++j) {
             bool color;
             if ((i + j) % 2 == 0){
                 color = 0;

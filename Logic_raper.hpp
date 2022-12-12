@@ -4,9 +4,15 @@
 
 #ifndef CHESS_TWO_LOGIC_RAPER_HPP
 #define CHESS_TWO_LOGIC_RAPER_HPP
+
+#include <iostream>
+#include <string>
+#include <vector>
+
 #include "Pieces.hpp"
 #include "Cell.hpp"
-#include <vector>
+
+
 
 using namespace std;
 
