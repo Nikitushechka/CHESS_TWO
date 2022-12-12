@@ -18,12 +18,16 @@ using namespace std;
 
 
 class Game{
+private:
     bool funny_ = true;
     unsigned short move_count_ = 0;
     vector<vector<Cell>> board_;
+
+    void init();
+
 public:
     Game();
-    void init();
+
     int start();
     void end();
     bool is_finnish();

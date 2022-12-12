@@ -10,6 +10,8 @@ Game::Game() {
 }
 
 void Game::init() {
+
+
     for (char i = 1; i < 9; ++i) {
         for (char j = 1; j < 9; ++j) {
             this->board_[i][j] = Cell(i, j);
