@@ -14,6 +14,7 @@ void Game::Init() {
 
     vector<vector<Cell>> default_board(8);
 
+
     default_board[0] = {Cell(1, 1, Rook(0)), Cell(1, 2, Knight(0)), Cell(1, 3, Bishop(0)), Cell(1, 4, Queen(0)),
                         Cell(1, 5, King(0)), Cell(1, 6, Bishop(0)), Cell(1, 7, Knight(0)), Cell(1, 8, Rook(0) )};
 
@@ -30,12 +31,19 @@ void Game::Init() {
     this->board_ = default_board;
     for (vector<Cell>& i: default_board) {
         for (Cell& j: i) {
-            if (!j.IsEmpty()) {
+            if !(j.IsEmpty()) {
                 j.GetPiece->SetCell(make_unique<Cell>(j));
+                if (j.GetPiece->GetColor){
+                    (this->white_pieces_).push_back(j.GetPiece);
+                }
+                else{
+                    (this->black_pieces_).push_back(j.GetPiece);
+                }
             }
         }
     }
-
+    this->black_king_ = this->board[0][4];
+    this->white_king_ = this->board[7][4];
 }
 
 int Game::Play() {

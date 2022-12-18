@@ -7,8 +7,6 @@
 
 #include <iostream>
 #include <string>
-#include <vector>
-
 #include "Pieces.cpp"
 #include "Cell.cpp"
 
@@ -22,6 +20,10 @@ private:
     bool funny_ = true;
     unsigned short move_count_ = 0;
     vector<vector<Cell>> board_;
+    King* black_king_;
+    King* white_king_;
+    vector<Piece*> black_pieces_;
+    vector<Piece*> white_pieces_;
 
     void Init();
     int Play();

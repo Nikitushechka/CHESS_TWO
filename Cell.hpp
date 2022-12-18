@@ -12,6 +12,6 @@ public:
     Cell(char hor, char ver, Piece& piece): hor_(hor), ver_(ver), is_empty_(0), piece_(make_unique<Piece>(piece)) {};
 
     bool IsEmpty() {};
-    void SetPiece(Piece& piece) {};
+    void SetPiece(Piece piece) {};
     unique_ptr<Piece> GetPiece() {};
 };
