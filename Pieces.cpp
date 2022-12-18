@@ -4,35 +4,101 @@
 using namespace std;
 
 
-Piece::Piece(char hor, char ver, bool color, string type): hor_(hor), ver_(ver), color_(color), type_(type) {};
+Piece::Piece(bool color, string type): color_(color), type_(type), cell_(nullptr) {};
+Piece::Piece(bool color, string type, Cell& cell): color_(color), type_(type), cell_(make_unique<Cell>(cell)) {};
 
-bool Piece::check_move(char new_hor, char new_ver){};
-
-void Piece:: do_move(char new_hor, char new_ver){
-    this->hor_ = new_hor;
-    this->ver_ = new_ver;
+void Piece::SetCell(Cell& cell) {
+    this->cell_ = make_unique<Cell>(cell);
 };
 
-King::King(char hor, char ver, bool color): Piece(hor, ver, color, color ? "WK" : "BK") {};
+unique_ptr<Cell> Piece::GetCell() {
+    return cell_;
+};
 
-bool King::check_move(char new_hor, char new_ver){};
+bool Piece::IsAvailable(char new_hor, char new_ver) const = 0;
 
-Queen::Queen(char hor, char ver, bool color): Piece(hor, ver, color, color ? "WQ" : "BQ") {};
+bool Piece::TryMove(char new_hor, char new_ver) const = 0;
 
-bool Queen::check_move(char new_hor, char new_ver){};
+bool King::IsAvailable(char new_hor, char new_ver) const override {
+    if !((bool) this->cell_){
+        return false;
+    }
+    char hor = (this->cell_)->hor_;
+    char ver = (this->cell_)->ver_;
+    if !((1 <= new_hor) && (new_hor <= 8) && (1 <= new_ver) && (new_ver <= 8)){
+        return false;
+    }
+    return ((abs(new_hor - hor) <= 1) && (abs(new_ver - ver) <= 1)) && ((new_hor != hor) || (new_ver != ver));
+};
 
-Pawn::Pawn(char hor, char ver, bool color): Piece(hor, ver, color, color ? "WP" : "BP") {};
+bool King::TryMove(char new_hor, char new_ver) const override {};
 
-bool Pawn::check_move(char new_hor, char new_ver){};
+bool Queen::IsAvailable(char new_hor, char new_ver) const override {
+    if !((bool) this->cell_){
+        return false;
+    }
+    char hor = (this->cell_)->hor_;
+    char ver = (this->cell_)->ver_;
+    if !((1 <= new_hor) && (new_hor <= 8) && (1 <= new_ver) && (new_ver <= 8)){
+        return false;
+    }
+    return ((abs(new_hor - hor) == abs(new_ver - ver)) || ((new_hor == hor) || (new_ver == ver))) && ((new_hor != hor) || (new_ver != ver));
+};
 
-Bishop::Bishop(char hor, char ver, bool color): Piece(hor, ver, color, color ? "WB" : "BB") {};
+bool Queen::TryMove(char new_hor, char new_ver) const override {};
 
-bool Bishop::check_move(char new_hor, char new_ver){};
+bool Pawn::IsAvailable(char new_hor, char new_ver) const override {
+    if !((bool) this->cell_){
+        return false;
+    }
+    char hor = (this->cell_)->hor_;
+    char ver = (this->cell_)->ver_;
+    if !((1 <= new_hor) && (new_hor <= 8) && (1 <= new_ver) && (new_ver <= 8)){
+        return false;
+    }
+    return ((new_hor == hor) && ((abs(new_ver - ver) == 1) || (abs(new_ver - ver) == 2))) || ((abs(new_hor - hor) == 1) && (abs(new_ver - ver) == 1));
+};
 
-Knight::Knight(char hor, char ver, bool color): Piece(hor, ver, color, color ? "WH" : "BH") {};
+bool Pawn::TryMove(char new_hor, char new_ver) const override {};
 
-bool Knight::check_move(char new_hor, char new_ver){};
+bool Bishop::IsAvailable(char new_hor, char new_ver) const override {
+    if !((bool) this->cell_){
+        return false;
+    }
+    char hor = (this->cell_)->hor_;
+    char ver = (this->cell_)->ver_;
+    if !((1 <= new_hor) && (new_hor <= 8) && (1 <= new_ver) && (new_ver <= 8)){
+        return false;
+    }
+    return (abs(new_hor - hor) == abs(new_ver - ver)) && ((new_hor != hor) || (new_ver != ver));
+};
 
-Rook::Rook(char hor, char ver, bool color): Piece(hor, ver, color, color ? "WR" : "BR") {};
+bool Bishop::TryMove(char new_hor, char new_ver) const override {};
 
-bool Rook::check_move(char new_hor, char new_ver){};
+bool Knight::IsAvailable(char new_hor, char new_ver) const override {
+    if !((bool) this->cell_){
+        return false;
+    }
+    char hor = (this->cell_)->hor_;
+    char ver = (this->cell_)->ver_;
+    if !((1 <= new_hor) && (new_hor <= 8) && (1 <= new_ver) && (new_ver <= 8)){
+        return false;
+    }
+    return abs((new_hor - hor) * (new_ver - ver)) == 2;
+};
+
+bool Knight::TryMove(char new_hor, char new_ver) const override {};
+
+bool Rook::IsAvailable(char new_hor, char new_ver) const override {
+    if !((bool) this->cell_){
+        return false;
+    }
+    char hor = (this->cell_)->hor_;
+    char ver = (this->cell_)->ver_;
+    if !((1 <= new_hor) && (new_hor <= 8) && (1 <= new_ver) && (new_ver <= 8)){
+        return false;
+    }
+    return ((new_hor == hor) || (new_ver == ver)) && ((new_hor != hor) || (new_ver != ver));
+};
+
+bool Rook::TryMove(char new_hor, char new_ver) const override {};

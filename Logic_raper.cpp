@@ -5,11 +5,12 @@
 
 using namespace std;
 
+
 Game::Game() {
 
 }
 
-void Game::init() {
+void Game::Init() {
 
     vector<vector<Cell>> default_board(8);
 
@@ -37,7 +38,7 @@ void Game::init() {
 
 }
 
-int Game::play() {
+int Game::Play() {
     while (funny_) {
         this->move_count_+=1;
 
@@ -63,7 +64,7 @@ int Game::play() {
     }
 }
 
-void Game::start() {
+void Game::Start() {
     this->init();
 
     this->play();
@@ -71,11 +72,11 @@ void Game::start() {
     return;
 }
 
-void Game::end() {
+void Game::End() {
     this->funny_ = 0;
 }
 
-bool Game::is_finnished() {
+bool Game::IsFinnished() {
     return false;
 }
 

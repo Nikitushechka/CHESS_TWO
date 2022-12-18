@@ -1,7 +1,8 @@
 #include <iostream>
-#include "Logic_raper.hpp"
-#include "Cell.hpp"
-#include "Pieces.hpp"
+#include "Logic_raper.cpp"
+#include "Cell.cpp"
+#include "Pieces.cpp"
+
 
 int main() {
 

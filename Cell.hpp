@@ -1,21 +1,17 @@
-#ifndef CELL_HPP_INCLUDED
-#define CELL_HPP_INCLUDED
 #include <memory>
-#include "Pieces.hpp"
-
-
+#include "Pieces.cpp"
+using namespace std;
 
 
 class Cell{
     char hor_;
     char ver_;
-    bool is_empty_;
     unique_ptr<Piece> piece_;
 public:
-    Cell(char hor_, char ver_): hor_(hor_), ver_(ver_), is_empty_(1), piece_(nullptr) {}
-    Cell(char hor_, char ver_, Piece& piece_): hor_(hor_), ver_(ver_), is_empty_(0), piece_(make_unique<Piece>(piece_)) {}
+    Cell(char hor, char ver): hor_(hor), ver_(ver), is_empty_(1), piece_(nullptr) {};
+    Cell(char hor, char ver, Piece& piece): hor_(hor), ver_(ver), is_empty_(0), piece_(make_unique<Piece>(piece)) {};
 
-    bool IsEmpty() {return is_empty_;}
+    bool IsEmpty() {};
+    void SetPiece(Piece& piece) {};
+    unique_ptr<Piece> GetPiece() {};
 };
-
-#endif // CELL_HPP_INCLUDED

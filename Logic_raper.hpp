@@ -9,8 +9,8 @@
 #include <string>
 #include <vector>
 
-#include "Pieces.hpp"
-#include "Cell.hpp"
+#include "Pieces.cpp"
+#include "Cell.cpp"
 
 
 
@@ -23,15 +23,15 @@ private:
     unsigned short move_count_ = 0;
     vector<vector<Cell>> board_;
 
-    void init();
-    int play();
+    void Init();
+    int Play();
 
 public:
     Game();
 
-    void start();
-    void end();
-    bool is_finnished();
+    void Start();
+    void End();
+    bool IsFinnished();
 };
 
 

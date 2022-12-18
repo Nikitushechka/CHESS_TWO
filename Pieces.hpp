@@ -1,55 +1,74 @@
-#ifndef PIECES_HPP_INCLUDED
-#define PIECES_HPP_INCLUDED
 #include <iostream>
 #include <string>
+#include <memory>
+#include "Cell.cpp"
 using namespace std;
 
+
 class Piece{
-    char hor_;
-    char ver_;
     bool color_;
     string type_;
+    unique_ptr<Cell> cell_;
 public:
-    Piece();
-    Piece(char hor, char ver, bool color, string type);
-    virtual bool check_move(char new_hor, char new_ver);
-    void do_move(char new_hor, char new_ver);
+    Piece(bool color, string type): color_(color), type_(type), cell_(nullptr) {};
+    Piece(bool color, string type, Cell& cell): color_(color), type_(type), cell_(make_unique<Cell>(cell)) {};
+
+    virtual bool IsAvailable(char new_hor, char new_ver) const = 0;
+    virtual bool TryMove(char new_hor, char new_ver) const = 0;
+    void SetCell(Cell& cell) {};
+    unique_ptr<Cell> GetCell() {};
 };
 
 class King: public Piece{
 public:
-    King(char hor, char ver, bool color);
-    bool check_move(char new_hor, char new_ver) override;
+    King(bool color): Piece(color, color ? "WK" : "BK") {};
+    King(bool color, Cell& cell): Piece(color, color ? "WK" : "BK", cell) {};
+
+    bool IsAvailable(char new_hor, char new_ver) const override {};
+    bool TryMove(char new_hor, char new_ver) const override {};
 };
 
 class Queen: public Piece{
 public:
-    Queen(char hor, char ver, bool color);
-    bool check_move(char new_hor, char new_ver) override;
+    Queen(bool color): Piece(color, color ? "WQ" : "BQ") {};
+    Queen(bool color, Cell& cell): Piece(color, color ? "WQ" : "BQ", cell) {};
+
+    bool IsAvailable(char new_hor, char new_ver) const override {};
+    bool TryMove(char new_hor, char new_ver) const override {};
 };
 
 class Pawn: public Piece{
 public:
-    Pawn(char hor, char ver, bool color);
-    bool check_move(char new_hor, char new_ver) override;
+    Pawn(bool color): Piece(color, color ? "WP" : "BP") {};
+    Pawn(bool color, Cell& cell): Piece(color, color ? "WP" : "BP", cell) {};
+
+    bool IsAvailable(char new_hor, char new_ver) const override {};
+    bool TryMove(char new_hor, char new_ver) const override {};
 };
 
 class Bishop: public Piece{
 public:
-    Bishop(char hor, char ver, bool color);
-    bool check_move(char new_hor, char new_ver) override;
+    Bishop(bool color): Piece(color, color ? "WB" : "BB") {};
+    Bishop(bool color, Cell& cell): Piece(color, color ? "WB" : "BB", cell) {};
+
+    bool IsAvailable(char new_hor, char new_ver) const override {};
+    bool TryMove(char new_hor, char new_ver) const override {};
 };
 
 class Knight: public Piece{
 public:
-    Knight(char hor, char ver, bool color);
-    bool check_move(char new_hor, char new_ver) override;
+    Knight(bool color): Piece(color, color ? "WH" : "BH") {};
+    Knight(bool color, Cell& cell): Piece(color, color ? "WH" : "BH", cell) {};
+
+    bool IsAvailable(char new_hor, char new_ver) const override {};
+    bool TryMove(char new_hor, char new_ver) const override {};
 };
 
 class Rook: public Piece{
 public:
-    Rook(char hor, char ver, bool color);
-    bool check_move(char new_hor, char new_ver) override;
-};
+    Rook(bool color): Piece(color, color ? "WR" : "BR") {};
+    Rook(bool color, Cell& cell): Piece(color, color ? "WR" : "BR", cell) {};
 
-#endif // PIECES_HPP_INCLUDED
+    bool IsAvailable(char new_hor, char new_ver) const override {};
+    bool TryMove(char new_hor, char new_ver) const override {};
+};
