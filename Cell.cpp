@@ -10,7 +10,7 @@ bool Cell::IsEmpty() {
     return !((bool) piece_);
 };
 
-void Cell::SetPiece(Piece piece) {
+void Cell::SetPiece(Piece &piece) {
     (this->piece_).reset(piece);
 };
 

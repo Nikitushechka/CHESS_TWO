@@ -1,17 +1,7 @@
-//
-// Created by Jenya on 11.12.2022.
-//
-
-#ifndef CHESS_TWO_LOGIC_RAPER_HPP
-#define CHESS_TWO_LOGIC_RAPER_HPP
-
 #include <iostream>
 #include <string>
-#include "Pieces.cpp"
-#include "Cell.cpp"
-
-
-
+#include <vector>
+#include "Cell.hpp"
 using namespace std;
 
 
@@ -35,6 +25,3 @@ public:
     void End();
     bool IsFinnished();
 };
-
-
-#endif //CHESS_TWO_LOGIC_RAPER_HPP

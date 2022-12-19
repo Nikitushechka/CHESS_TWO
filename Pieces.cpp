@@ -10,7 +10,7 @@ bool Piece::TryMove(char new_hor, char new_ver, Game* game) {
     if !(this->IsAvailable(new_hor, new_ver)){
         return false;
     }
-    if !(this->IsWayClear(new_hor, new_ver)){
+    if !(this->IsWayClear(new_hor, new_ver, game->board_)){
         return false;
     }
     if (game->IsCheck()){
@@ -37,7 +37,7 @@ bool Piece::TryMove(char new_hor, char new_ver, Game* game) {
         (game->white_king_)->r_castling_available = false;
     }
     if ((this->GetType() == "BP") || (this->GetType() == "WP")){
-        ((Pawn*)this)->was_moved = true;
+        ((Pawn*) this)->was_moved = true;
     }
     (this->GetCell).release();
     (game->board_[new_hor][new_ver]).SetPiece(*this);
@@ -45,7 +45,7 @@ bool Piece::TryMove(char new_hor, char new_ver, Game* game) {
     return true;
 };
 
-void Piece::SetCell(Cell cell) {
+void Piece::SetCell(Cell &cell) {
     (this->cell_).reset(cell);
 };
 
@@ -73,8 +73,13 @@ bool King::IsAvailable(char new_hor, char new_ver) const override {
     return ((abs(new_hor - hor) <= 1) && (abs(new_ver - ver) <= 1)) && ((new_hor != hor) || (new_ver != ver));
 };
 
-bool King::IsWayClear(char new_hor, char new_ver) const override {
-
+bool King::IsWayClear(char new_hor, char new_ver, vector<vector<Cell>> board) const override {
+    if ((bool) board[new_hor][new_ver].piece_){
+        if (((board[new_hor][new_ver].piece_)->GetType)[1] == "K"){
+            return false;
+        }
+    }
+    return true;
 };
 
 bool Queen::IsAvailable(char new_hor, char new_ver) const override {
@@ -89,7 +94,89 @@ bool Queen::IsAvailable(char new_hor, char new_ver) const override {
     return ((abs(new_hor - hor) == abs(new_ver - ver)) || ((new_hor == hor) || (new_ver == ver))) && ((new_hor != hor) || (new_ver != ver));
 };
 
-bool Queen::IsWayClear(char new_hor, char new_ver) const override {};
+bool Queen::IsWayClear(char new_hor, char new_ver, vector<vector<Cell>> board) const override {
+    if ((bool) board[new_hor][new_ver].piece_){
+        if (((board[new_hor][new_ver].piece_)->GetType)[1] == "K"){
+            return false;
+        }
+    }
+    char hor = (this->cell_)->hor_;
+    char ver = (this->cell_)->ver_;
+    bool way_clear = true;
+    if ((new_hor > hor) && (new_ver > ver)){
+        for (int i = hor + 1; i <= new_hor - 1; i++){
+            for (int j = ver + 1; j <= new_ver - 1; j++){
+                if ((bool) board[i][j].piece_){
+                    way_clear = false;
+                    break;
+                }
+            }
+        }
+    }
+    if ((new_hor > hor) && (new_ver < ver)){
+        for (int i = hor + 1; i <= new_hor - 1; i++){
+            for (int j = ver - 1; j >= new_ver + 1; j--){
+                if ((bool) board[i][j].piece_){
+                    way_clear = false;
+                    break;
+                }
+            }
+        }
+    }
+    if ((new_hor < hor) && (new_ver > ver)){
+        for (int i = hor - 1; i >= new_hor + 1; i--){
+            for (int j = ver + 1; j <= new_ver - 1; j++){
+                if ((bool) board[i][j].piece_){
+                    way_clear = false;
+                    break;
+                }
+            }
+        }
+    }
+    if ((new_hor < hor) && (new_ver < ver)){
+        for (int i = hor - 1; i >= new_hor + 1; i--){
+            for (int j = ver - 1; j >= new_ver + 1; j--){
+                if ((bool) board[i][j].piece_){
+                    way_clear = false;
+                    break;
+                }
+            }
+        }
+    }
+    if ((new_hor == hor) && (new_ver > ver)){
+        for (int j = ver + 1; j <= new_ver - 1; j++){
+            if ((bool) board[hor][j].piece_){
+                way_clear = false;
+                break;
+            }
+        }
+    }
+    if ((new_hor == hor) && (new_ver < ver)){
+        for (int j = ver - 1; j >= new_ver + 1; j--){
+            if ((bool) board[hor][j].piece_){
+                way_clear = false;
+                break;
+            }
+        }
+    }
+    if ((new_ver == ver) && (new_hor > hor)){
+        for (int i = hor + 1; i <= new_hor - 1; i++){
+            if ((bool) board[i][ver].piece_){
+                way_clear = false;
+                break;
+            }
+        }
+    }
+    if ((new_ver == ver) && (new_hor < hor)){
+        for (int i = hor - 1; i >= new_hor + 1; i--){
+            if ((bool) board[i][ver].piece_){
+                way_clear = false;
+                break;
+            }
+        }
+    }
+    return way_clear;
+};
 
 bool Pawn::IsAvailable(char new_hor, char new_ver) const override {
     if !((bool) this->cell_){
@@ -103,7 +190,44 @@ bool Pawn::IsAvailable(char new_hor, char new_ver) const override {
     return ((new_hor == hor) && ((abs(new_ver - ver) == 1) || (abs(new_ver - ver) == 2))) || ((abs(new_hor - hor) == 1) && (abs(new_ver - ver) == 1));
 };
 
-bool Pawn::IsWayClear(char new_hor, char new_ver) const override {};
+bool Pawn::IsWayClear(char new_hor, char new_ver, vector<vector<Cell>> board) const override {
+    if ((bool) board[new_hor][new_ver].piece_){
+        if (((board[new_hor][new_ver].piece_)->GetType)[1] == "K"){
+            return false;
+        }
+    }
+    char hor = (this->cell_)->hor_;
+    char ver = (this->cell_)->ver_;
+    if (this->GetColor()){
+        if !(new_ver < ver){
+            return false;
+        }
+        if ((new_ver - ver == -2) && (this->was_moved)){
+            return false;
+        }
+        if ((new_ver - ver == -1) && (new_hor == hor) && ((bool) board[new_hor][new_ver].piece_)){
+            return false;
+        }
+        if ((new_ver - ver == -1) && ((new_hor - hor == 1) || (new_hor - hor == -1)) && !((bool) board[new_hor][new_ver].piece_)){
+            return false;
+        }
+    }
+    else{
+        if !(new_ver > ver){
+            return false;
+        }
+        if ((new_ver - ver == 2) && (this->was_moved)){
+            return false;
+        }
+        if ((new_ver - ver == 1) && (new_hor == hor) && ((bool) board[new_hor][new_ver].piece_)){
+            return false;
+        }
+        if ((new_ver - ver == 1) && ((new_hor - hor == 1) || (new_hor - hor == -1)) && !((bool) board[new_hor][new_ver].piece_)){
+            return false;
+        }
+    }
+    return true;
+};
 
 bool Bishop::IsAvailable(char new_hor, char new_ver) const override {
     if !((bool) this->cell_){
@@ -117,7 +241,57 @@ bool Bishop::IsAvailable(char new_hor, char new_ver) const override {
     return (abs(new_hor - hor) == abs(new_ver - ver)) && ((new_hor != hor) || (new_ver != ver));
 };
 
-bool Bishop::IsWayClear(char new_hor, char new_ver) const override {};
+bool Bishop::IsWayClear(char new_hor, char new_ver, vector<vector<Cell>> board) const override {
+    if ((bool) board[new_hor][new_ver].piece_){
+        if (((board[new_hor][new_ver].piece_)->GetType)[1] == "K"){
+            return false;
+        }
+    }
+    char hor = (this->cell_)->hor_;
+    char ver = (this->cell_)->ver_;
+    bool way_clear = true;
+    if ((new_hor > hor) && (new_ver > ver)){
+        for (int i = hor + 1; i <= new_hor - 1; i++){
+            for (int j = ver + 1; j <= new_ver - 1; j++){
+                if ((bool) board[i][j].piece_){
+                    way_clear = false;
+                    break;
+                }
+            }
+        }
+    }
+    if ((new_hor > hor) && (new_ver < ver)){
+        for (int i = hor + 1; i <= new_hor - 1; i++){
+            for (int j = ver - 1; j >= new_ver + 1; j--){
+                if ((bool) board[i][j].piece_){
+                    way_clear = false;
+                    break;
+                }
+            }
+        }
+    }
+    if ((new_hor < hor) && (new_ver > ver)){
+        for (int i = hor - 1; i >= new_hor + 1; i--){
+            for (int j = ver + 1; j <= new_ver - 1; j++){
+                if ((bool) board[i][j].piece_){
+                    way_clear = false;
+                    break;
+                }
+            }
+        }
+    }
+    if ((new_hor < hor) && (new_ver < ver)){
+        for (int i = hor - 1; i >= new_hor + 1; i--){
+            for (int j = ver - 1; j >= new_ver + 1; j--){
+                if ((bool) board[i][j].piece_){
+                    way_clear = false;
+                    break;
+                }
+            }
+        }
+    }
+    return way_clear;
+};
 
 bool Knight::IsAvailable(char new_hor, char new_ver) const override {
     if !((bool) this->cell_){
@@ -131,7 +305,14 @@ bool Knight::IsAvailable(char new_hor, char new_ver) const override {
     return abs((new_hor - hor) * (new_ver - ver)) == 2;
 };
 
-bool Knight::IsWayClear(char new_hor, char new_ver) const override {};
+bool Knight::IsWayClear(char new_hor, char new_ver, vector<vector<Cell>> board) const override {
+    if ((bool) board[new_hor][new_ver].piece_){
+        if (((board[new_hor][new_ver].piece_)->GetType)[1] == "K"){
+            return false;
+        }
+    }
+    return true;
+};
 
 bool Rook::IsAvailable(char new_hor, char new_ver) const override {
     if !((bool) this->cell_){
@@ -145,4 +326,46 @@ bool Rook::IsAvailable(char new_hor, char new_ver) const override {
     return ((new_hor == hor) || (new_ver == ver)) && ((new_hor != hor) || (new_ver != ver));
 };
 
-bool Rook::IsWayClear(char new_hor, char new_ver) const override {};
+bool Rook::IsWayClear(char new_hor, char new_ver, vector<vector<Cell>> board) const override {
+    if ((bool) board[new_hor][new_ver].piece_){
+        if (((board[new_hor][new_ver].piece_)->GetType)[1] == "K"){
+            return false;
+        }
+    }
+    char hor = (this->cell_)->hor_;
+    char ver = (this->cell_)->ver_;
+    bool way_clear = true;
+    if ((new_hor == hor) && (new_ver > ver)){
+        for (int j = ver + 1; j <= new_ver - 1; j++){
+            if ((bool) board[hor][j].piece_){
+                way_clear = false;
+                break;
+            }
+        }
+    }
+    if ((new_hor == hor) && (new_ver < ver)){
+        for (int j = ver - 1; j >= new_ver + 1; j--){
+            if ((bool) board[hor][j].piece_){
+                way_clear = false;
+                break;
+            }
+        }
+    }
+    if ((new_ver == ver) && (new_hor > hor)){
+        for (int i = hor + 1; i <= new_hor - 1; i++){
+            if ((bool) board[i][ver].piece_){
+                way_clear = false;
+                break;
+            }
+        }
+    }
+    if ((new_ver == ver) && (new_hor < hor)){
+        for (int i = hor - 1; i >= new_hor + 1; i--){
+            if ((bool) board[i][ver].piece_){
+                way_clear = false;
+                break;
+            }
+        }
+    }
+    return way_clear;
+};

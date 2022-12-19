@@ -1,9 +1,9 @@
 #include <iostream>
 #include <string>
 #include <memory>
-#include "Cell.cpp"
 using namespace std;
 
+class Cell;
 
 class Piece{
     bool color_;
@@ -16,7 +16,7 @@ public:
     virtual bool IsAvailable(char new_hor, char new_ver) const = 0;
     virtual bool IsWayClear(char new_hor, char new_ver) const = 0;
     bool TryMove(char new_hor, char new_ver) {};
-    void SetCell(Cell cell) {};
+    void SetCell(Cell &cell) {};
     unique_ptr<Cell> GetCell() {};
     string GetType() {};
     bool GetColor() {};
