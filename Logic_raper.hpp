@@ -24,4 +24,8 @@ public:
     void Start();
     void End();
     bool IsFinnished();
+
+    vector<vector<Cell>> GetBoard() {
+        return this->board_;
+    }
 };
